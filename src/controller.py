@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from scipy.linalg import solve_continuous_are
 import numpy as np
 
 class Controller(ABC):
@@ -27,3 +28,19 @@ class PIDController(Controller):
         force += self.Ki * self.integral * dt
         self.previous_error = error
         return force
+
+class LQRController(Controller):
+    def __init__(self, Q, R, mass=1.0):
+        self.Q = Q
+        self.R = R
+        A = np.array([[0, 1],[0, 0]])
+        B = np.array([[0],[1/mass]])
+        P = solve_continuous_are(A, B, Q, R)
+        self.K = np.linalg.inv(R) @ B.T @ P
+    
+    def compute(self, target_position, current_position, current_velocity, dt):
+        current_state = np.array([current_position, current_velocity])
+        target_state = np.array([target_position, 0])
+        error = np.array(current_state) - np.array(target_state)
+        force = -self.K @ error
+        return float(force)
