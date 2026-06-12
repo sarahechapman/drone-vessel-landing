@@ -7,7 +7,7 @@ class Simulation:
     def __init__(self, dt=0.01):
         self.drone = Drone()
         self.vessel = Vessel()
-        self.controller = PIDController(Kp=15, Ki=0.1, Kd=8)
+        self.controller = PIDController(Kp=15, Ki=0.5, Kd=8)
         self.dt = dt
         self.t = 0.0
         self.time_history = []
@@ -19,6 +19,7 @@ class Simulation:
         vessel_position = self.vessel.get_position()
         drone_position = self.drone.get_position()
         force = self.controller.compute(vessel_position[2], drone_position[2], self.dt)
+        force += self.drone.mass * self.drone.g
         self.drone.update(force, self.dt)
         self.time_history.append(self.t)
         self.drone_position_history.append(drone_position[2])
