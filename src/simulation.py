@@ -7,7 +7,7 @@ class Simulation:
     def __init__(self, dt=0.01):
         self.drone = Drone()
         self.vessel = Vessel()
-        self.controller = PIDController(Kp=1, Ki=2, Kd=3)
+        self.controller = PIDController(Kp=15, Ki=0.1, Kd=8)
         self.dt = dt
         self.t = 0.0
         self.time_history = []

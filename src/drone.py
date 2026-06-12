@@ -8,7 +8,8 @@ class Drone:
         self.g = 9.81    # m/s^2
 
     def update(self, force, dt):
-        acceleration = force / self.mass
+        force_vector = np.array([0.0, 0.0, force - self.mass * self.g])
+        acceleration = force_vector / self.mass
         self.velocity += acceleration * dt
         self.position += self.velocity * dt
 
